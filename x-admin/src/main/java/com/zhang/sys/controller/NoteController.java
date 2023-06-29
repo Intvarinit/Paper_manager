@@ -1,5 +1,6 @@
 package com.zhang.sys.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.zhang.common.vo.Result;
 import com.zhang.sys.entity.Note;
 import com.zhang.sys.entity.Paper;
@@ -7,9 +8,11 @@ import com.zhang.sys.entity.Tag;
 import com.zhang.sys.entity.User;
 import com.zhang.sys.mapper.NoteMapper;
 import com.zhang.sys.service.impl.NoteServiceImpl;
+import com.zhang.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,7 +40,7 @@ public class NoteController {
     }
 
     @PostMapping("/new")
-    public Result<?> addUser(@RequestBody Paper paperInfo){
+    public Result<?> addNote(@RequestBody Paper paperInfo){
         int id = noteService.getCurrentID();
         Note note = new Note();
         note.setNoteID(id);
@@ -55,4 +58,20 @@ public class NoteController {
         return Result.success("修改笔记成功!");
     }
 
+    //文件上传指定的功能函数
+    @PostMapping("/image/upload")
+    public JSONObject imageUpload(@RequestParam("editormd-image-file") MultipartFile image){
+        JSONObject jsonObject = new JSONObject();
+        if(image != null) {
+            String path = FileUtils.uploadFile(image);
+            System.out.println(path);
+            jsonObject.put("url", path);
+            jsonObject.put("success", 1);
+            jsonObject.put("message", "upload success!");
+            return jsonObject;
+        }
+        jsonObject.put("success", 0);
+        jsonObject.put("message", "upload error!");
+        return jsonObject;
+    }
 }

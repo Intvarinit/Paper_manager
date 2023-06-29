@@ -2,7 +2,6 @@
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
     <div class="dashboard-text">userId: {{ userId }}</div>
-    <div class="dashboard-text"> 看看怎么优化富文本的样式 </div>
     <div class="dashboard-text">完成用户评论的开发</div>
     <div class="dashboard-text"> 注册页面的样式优化 </div>
   </div>

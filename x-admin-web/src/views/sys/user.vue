@@ -7,10 +7,10 @@
         <el-col :span="20">
           <el-input v-model="searchModel.username" placeholder="用户名" clearable />
           <el-input v-model="searchModel.phone" placeholder="电话" clearable />
-          <el-button type="primary" round icon="el-icon-search" @click="getUserList">查询</el-button>
+          <el-button style="padding-bottom: 25px;" type="primary" round icon="el-icon-search" @click="getUserList">查询</el-button>
         </el-col>
-        <el-col :span="3.5" align="right" style="margin-top: 6px;">
-          <el-button type="primary" round icon="el-icon-plus" @click="openEditUi(null)">新增用户</el-button>
+        <el-col :span="3.5" align="right" style="margin-top: 0px;">
+          <el-button style="padding-bottom: 25px;" type="primary" round icon="el-icon-plus" @click="openEditUi(null)">新增用户</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -34,8 +34,8 @@
         <el-table-column prop="email" label="电子邮件" />
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="openEditUi(scope.row.userID)" />
-            <el-button type="danger" icon="el-icon-delete" circle @click="deleteUserById(scope.row)" />
+            <el-button circle style="padding-bottom: 10px;" type="primary" icon="el-icon-edit" @click="openEditUi(scope.row.userID)" />
+            <el-button circle type="danger" icon="el-icon-delete" @click="deleteUserById(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
@@ -52,13 +52,13 @@
       @current-change="handleCurrentChange"
     />
 
-    <!-- 用户信息编对话框 -->
+    <!-- 用户信息编辑对话框 -->
     <el-dialog :title="title" :visible.sync="dialogFormVisible" @close="clearForm">
       <el-form ref="userFormRef" :model="userForm" :rules="rules">
         <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
-          <el-input v-model="userForm.username" autocomplete="off" />
+          <el-input v-model="userForm.username" autocomplete="off" style="left: 5px;" />
         </el-form-item>
-        <el-form-item v-if="userForm.userID==null||userForm.userID==undefined" label="用户密码" prop="password" :label-width="formLabelWidth">
+        <el-form-item v-if="userForm.userID==null||userForm.userID==undefined" label="用户密码" prop="password" :label-width="formLabelWidth" style="margin-right: 12px;">
           <el-input v-model="userForm.password" type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="联系电话" :label-width="formLabelWidth">
@@ -212,4 +212,5 @@ export default {
   .el-dialog .el-input{
     width: 85%;
   }
+
 </style>

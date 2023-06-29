@@ -45,7 +45,7 @@ export default {
     }
   },
   created() {
-    if(this.paperInfo.noteID != undefined){
+    if(this.paperInfo != undefined && undefined != this.paperInfo.noteID){
       // 获取文章内容
       this.getNoteInfo()
     }
@@ -88,21 +88,51 @@ export default {
         statusbar: false, // 隐藏底部状态栏
         menubar: true,
         fontsize_formats: '12px 13px 14px 15px 16px 17px 18px 20px 22px 24px 26px 30px 32px 35px 40px 50px',
-        plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen link template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help emoticons autosave bdmap indent2em autoresize formatpainter axupimgs',
+        plugins: 'print preview image searchreplace autolink directionality visualblocks visualchars fullscreen link template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help emoticons autosave bdmap indent2em autoresize formatpainter axupimgs',
         // 移动下面字符的位置就能影响前端的摆放
-        toolbar: 'code undo redo restoredraft | cut copy paste pastetext | bullist numlist table fontsizeselect | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | \
+        toolbar: 'code undo redo restoredraft | cut copy paste pastetext | bullist numlist table fontsizeselect image| forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | \
         styleselect formatselect fontselect | blockquote subscript superscript removeformat | \
         charmap emoticons hr pagebreak insertdatetime print preview | fullscreen | bdmap indent2em lineheight formatpainter axupimgs',
         // paste_webkit_styles: true,
         // paste_data_images: false,
-        // images_upload_url: '', // 图片上传地址
-        // contextmenu: `inserttable | cell row column deletetable`,
-        // relative_urls: false,
-        // remove_script_host: false,
+        // images_upload_url: '/note/image/upload', // 图片上传地址
+        content_style: `
+            *                         { padding:0; margin:0; }
+            html, body                { height:100%; }
+            img                       { max-width:100%; display:block;height:auto; }
+            a                         { text-decoration: none; }
+            iframe                    { width: 100%; }
+            p                         { line-height:1.6; margin: 0px; }
+            table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
+            .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
+            ul,ol                     { list-style-position:inside; }
+          `,
         autosave_ask_before_unload: false,
         // content_css: 'plugins/becodesample/highlight.js-11.5.1/styles/atom-one-light.css',
         advlist_bullet_styles: 'default,circle,disc,square',
-        advlist_number_styles: 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman'
+        advlist_number_styles: 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman',
+        images_upload_handler: function (blobInfo, success, failure) {//关键代码
+          var form = new FormData();
+          console.log(blobInfo)
+          form.append('editormd-image-file', blobInfo.blob(),  blobInfo.filename());
+          $.ajax({
+              url: "/note/image/upload" ,
+              type: "post",
+              data: form,
+              dataType: 'json',
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                // console.log(data);
+                var imgUrl = data.url;//根据返回值得不同这里要自己定义
+                // console.log(imgUrl);
+                success(imgUrl);
+              },
+              // error: function (e) {
+              //   alert(e);
+              // }
+          });
+        }
       }
       this.tinymceFlag++
     },
@@ -118,10 +148,10 @@ export default {
     },
     async saveNote() {
       // 未创建note而且content为空的情况下不会新建note
-      if(this.paperInfo.noteID === undefined && this.form.content === undefined){
+      if(this.paperInfo.noteID === null && this.form.content === undefined){
         this.$message.warning("您未对当前笔记信息做任何更改!")
       }else{
-        if(this.paperInfo.noteID === undefined){
+        if(this.paperInfo.noteID === null){
           await noteApi.createNote(this.paperInfo).then(response => {
             this.form.NoteID = response.data
             this.paperInfo.noteID = this.form.NoteID
@@ -129,7 +159,7 @@ export default {
           // 把创建好的id给到paperInfo里面
           await paperApi.savePaper(this.paperInfo)
         }
-        noteApi.saveNote(this.form)
+        await noteApi.saveNote(this.form)
         this.$message.success("保存论文笔记信息成功!")
       }
     },
