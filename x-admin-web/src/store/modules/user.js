@@ -58,6 +58,8 @@ const actions = {
         const { name, id, status } = data
         // console.log('current id is:')
         // console.log(id)
+        // 在vue原型注入用户信息
+        Vue.prototype.$UserName = name
         Vue.prototype.$UserId = id
         Vue.prototype.$UserStatus = status
 

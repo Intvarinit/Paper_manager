@@ -1,5 +1,6 @@
 package com.zhang.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -28,11 +29,13 @@ public class Comment implements Serializable {
     /**
      * 外键，笔记ID
      */
+    @TableField(value = "noteID")
     private Integer noteID;
 
     /**
      * 父评论ID
      */
+    @TableField(value = "fatherID")
     private Integer fatherID;
 
     /**
@@ -53,7 +56,11 @@ public class Comment implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(value = "CREATED_TIME")
     private LocalDateTime createdTime;
+
+    @TableField(value = "CommenterName")
+    private String CommenterName;
 
     public Integer getCommentID() {
         return commentID;
@@ -115,6 +122,15 @@ public class Comment implements Serializable {
             ", content=" + content +
             ", likes=" + likes +
             ", createdTime=" + createdTime +
+                ",commenterName=" + CommenterName +
         "}";
+    }
+
+    public String getCommenterName() {
+        return CommenterName;
+    }
+
+    public void setCommenterName(String commenterName) {
+        CommenterName = commenterName;
     }
 }

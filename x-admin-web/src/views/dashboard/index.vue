@@ -4,13 +4,14 @@
     <div class="dashboard-text">userId: {{ userId }}</div>
     <div class="dashboard-text">完成用户评论的开发</div>
     <div class="dashboard-text"> 注册页面的样式优化 </div>
+    <Comment />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
-
+import Comment from '@/views/paper/Comment.vue'
 export default {
   name: 'Dashboard',
   userId: 0,
@@ -18,6 +19,10 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  // eslint-disable-next-line vue/order-in-components
+  comments: {
+    Comment
   },
   created: function() {
     this.userId = Vue.prototype.$UserId

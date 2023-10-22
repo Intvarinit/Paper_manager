@@ -1,7 +1,9 @@
 <template>
-  <div id="Articles">
-    <!-- 用 v-for 渲染文章列表 -->
-    <Article v-for="article in articleList" :key="article.title" :article="article" />
+  <div>
+    <div id="Articles">
+      <!-- 用 v-for 渲染文章列表 -->
+      <Article v-for="article in articleList" :key="article.title" :article="article" />
+    </div>
   </div>
 </template>
 
